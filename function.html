@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Information Form</title>
+</head>
+<body>
+
+    <h2>Doctor Information Form</h2>
+
+    <form id="doctorForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="doctorId">Doctor ID:</label>
+        <input type="text" id="doctorId" name="doctorId" required>
+
+        <label for="specialization">Specialization:</label>
+        <select id="specialization" name="specialization" required>
+            <option value="ENT">ENT</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Dermatology">Dermatology</option>
+        </select>
+
+        <label for="experience">Experience in years:</label>
+        <input type="number" id="experience" name="experience" required>
+
+        <label for="email">Email address:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="mobile">Mobile Number:</label>
+        <input type="tel" id="mobile" name="mobile" required>
+
+        <button type="button" onclick="addDoctor()">Submit</button>
+    </form>
+
+    <label for="filter">Filter by Specialization:</label>
+    <select id="filter" onchange="filterTable()">
+        <option value="all">All Specializations</option>
+        <option value="ENT">ENT</option>
+        <option value="Cardiology">Cardiology</option>
+        <option value="Dermatology">Dermatology</option>
+    </select>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Doctor ID</th>
+                <th>Specialization</th>
+                <th>Experience (years)</th>
+                <th>Email Address</th>
+                <th>Mobile Number</th>
+                <th>Role</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="doctorTableBody"></tbody>
+    </table>
+
+    <script>
+        function addDoctor() {
+            const name = document.getElementById("name").value;
+            const doctorId = document.getElementById("doctorId").value;
+            const specialization = document.getElementById("specialization").value;
+            const experience = parseInt(document.getElementById("experience").value);
+            const email = document.getElementById("email").value;
+            const mobile = document.getElementById("mobile").value;
+
+            let role = "";
+            if (experience > 5) {
+                role = "Senior";
+            } else if (experience >= 2 && experience <= 5) {
+                role = "Junior";
+            } else {
+                role = "Trainee";
+            }
+
+            const tableBody = document.getElementById("doctorTableBody");
+            const newRow = tableBody.insertRow();
+
+            const cells = [
+                name,
+                doctorId,
+                specialization,
+                experience,
+                email,
+                mobile,
+                role,
+                '<button onclick="deleteRow(this)">Delete</button>'
+            ];
+
+            cells.forEach((cellData, index) => {
+                const cell = newRow.insertCell(index);
+                cell.innerHTML = cellData;
+            });
+
+
+            document.getElementById("doctorForm").reset();
+        }
+
+        function deleteRow(button) {
+            const row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        function filterTable() {
+            const filterValue = document.getElementById("filter").value;
+            const rows = document.getElementById("doctorTableBody").getElementsByTagName("tr");
+
+            for (let i = 0; i < rows.length; i++) {
+                const specialization = rows[i].getElementsByTagName("td")[2].innerHTML;
+
+                if (filterValue === "all" || specialization === filterValue) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
